@@ -17,8 +17,9 @@ if (fullPrice <= 0){
     console.log('Скидка не предусмотрена')
 }else if (fullPrice <= 30000){
     console.log('Даем скидку в 5%')
-}else{
+}else {
     console.log('Даем скидку в 10%')
+}
 // console.log(`title - ${title} - ${typeof title}
 // fullPrice - ${fullPrice} - ${typeof fullPrice}
 // adaptive - ${adaptive} - ${typeof adaptive}
@@ -28,8 +29,6 @@ if (fullPrice <= 0){
 // ${screens.toLowerCase().split(', ')}
 // ${(fullPrice * (rollback/100))}`
 // )
-
-}
 
 
 
