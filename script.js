@@ -3,11 +3,15 @@ const title = prompt('Как называется ваш проект?', 'Про
 const screens = prompt('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные')
 const screenPrice = +prompt('Сколько будет стоить данная работа?', '12000')
 const adaptive = prompt('Нужен ли адаптив на сайте?', 'Да/Нет') === 'Да' ? true : false
-let service1, service2, servicePrice1, servicePrice2
-for (let i = 1; i < 3; i++) {
-    eval('service' + i + ' = ' + 'prompt(\'Какой дополнительный тип услуги нужен?\')')
-    eval('servicePrice' + i + ' = ' + prompt('Сколько это будет стоить?', '1000'))
-}
+const service1 = prompt('Какой дополнительный тип услуги нужен?')
+const servicePrice1 = +prompt('Сколько это будет стоить?', '1000')
+const service2 = prompt('Какой дополнительный тип услуги нужен?')
+const servicePrice2 = +prompt('Сколько это будет стоить?', '1000')
+// let service1, service2, servicePrice1, servicePrice2
+// for (let i = 1; i < 3; i++) {
+//     eval('service' + i + ' = ' + 'prompt(\'Какой дополнительный тип услуги нужен?\')')
+//     eval('servicePrice' + i + ' = ' + prompt('Сколько это будет стоить?', '1000'))
+// }
 const fullPrice = screenPrice + servicePrice1 + servicePrice2
 const rollback = 12
 const servicePercentPrice = Math.ceil(fullPrice - (fullPrice * (rollback/100)))
