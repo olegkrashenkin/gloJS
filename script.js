@@ -1,43 +1,67 @@
 'use strict'
 
 
-let title = prompt('Как называется ваш проект?', ' КаЛьКулятор Верстки')
-let screens = prompt('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные')
-let screenPrice = +prompt('Сколько будет стоить данная работа?', '12000')
-let adaptive = confirm('Нужен ли адаптив на сайте?')
-let service1 = prompt('Какой дополнительный тип услуги нужен?')
-let servicePrice1 = +prompt('Сколько это будет стоить?', '1000')
-let service2 = prompt('Какой дополнительный тип услуги нужен?')
-let servicePrice2 = +prompt('Сколько это будет стоить?', '1000')
+let title, screens, screenPrice, adaptive
 let rollback = 12
-let allServicePrices, fullPrice, servicePercentPrice
+let allServicePrices, fullPrice, servicePercentPrice, service1, service2
 
+const isNumber = (num) => {
+    return !isNaN(parseFloat(num)) && isFinite(num)
+}
 
-const getAllServicePrices = function (...prices) {
+const asking = () => {
+    let tmp
+    title = prompt('Как называется ваш проект?', ' КаЛьКулятор Верстки')
+    screens = prompt('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные')
+    do {
+        tmp = prompt('Сколько будет стоить данная работа?', '12000')
+        if (tmp === null) {
+            tmp = 0
+            break
+        }
+        tmp = tmp.trim()
+    } while (!isNumber(tmp))
+    screenPrice = +tmp
+    adaptive = confirm('Нужен ли адаптив на сайте?')
+}
+
+const getAllServicePrices = () => {
+    let tmp
     let result = 0
-    for (const price of prices) {
-        result += price
+    for (let i = 0; i < 2; i++) {
+        i === 0
+            ? service1 = prompt('Какой дополнительный тип услуги нужен?')
+            : service2 = prompt('Какой дополнительный тип услуги нужен?')
+        do {
+            tmp = prompt('Сколько это будет стоить?', '1000')
+            if (tmp === null) {
+                tmp = 0
+                break
+            }
+            tmp = tmp.trim()
+        } while (!isNumber(tmp))
+        result += +tmp
     }
     return result
 }
 
-function getFullPrice (screenPrice, allServicePrices) {
+const getFullPrice = (screenPrice, allServicePrices) => {
     return screenPrice + allServicePrices
 }
 
-function getTitle (title) {
-    return title.trim()[0].toUpperCase() + title.slice(1).toLowerCase()
+const getTitle = (title) => {
+    return title.trim()[0].toUpperCase() + title.trim().slice(1).toLowerCase()
 }
 
-function getServicePercentPrices (fullPrice, rollback) {
+const getServicePercentPrices = (fullPrice, rollback) => {
     return Math.ceil(fullPrice - (fullPrice * (rollback / 100)))
 }
 
-const showTypeOf = function (variable) {
+const showTypeOf = (variable) => {
     return `${variable} - ${typeof variable}`
 }
 
-const getRollbackMessage = function (price) {
+const getRollbackMessage = (price) => {
     if (price <= 0) {
         return 'Что то пошло не так'
     } else if (price <= 15000) {
@@ -49,8 +73,8 @@ const getRollbackMessage = function (price) {
     }
 }
 
-
-allServicePrices = getAllServicePrices(servicePrice1, servicePrice2)
+asking()
+allServicePrices = getAllServicePrices()
 fullPrice = getFullPrice(screenPrice, allServicePrices)
 servicePercentPrice = getServicePercentPrices(fullPrice, rollback)
 title = getTitle(title)
