@@ -93,13 +93,3 @@ const appData = {
 }
 
 appData.start()
-
-
-
-// asking()
-// allServicePrices = getAllServicePrices()
-// fullPrice = getFullPrice(screenPrice, allServicePrices)
-// servicePercentPrice = getServicePercentPrices(fullPrice, rollback)
-// title = getTitle(title)
-
-
