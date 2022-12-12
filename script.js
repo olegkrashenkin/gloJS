@@ -5,24 +5,58 @@ let title, screens, screenPrice, adaptive
 let rollback = 12
 let allServicePrices, fullPrice, servicePercentPrice, service1, service2
 
-const isNumber = (num) => {
-    return !isNaN(parseFloat(num)) && isFinite(num)
+
+const appData = {
+    title: '',
+    screens: '',
+    screenPrice: 0,
+    adaptive: true,
+    rollback: 10,
+    allServicePrices: getAllServicePrices = () => {
+        let tmp
+        let result = 0
+        for (let i = 0; i < 2; i++) {
+            i === 0
+                ? service1 = prompt('Какой дополнительный тип услуги нужен?')
+                : service2 = prompt('Какой дополнительный тип услуги нужен?')
+            do {
+                tmp = prompt('Сколько это будет стоить?', '1000')
+                if (tmp === null) {
+                    tmp = 0
+                    break
+                }
+                tmp = tmp.trim()
+            } while (!isNumber(tmp))
+            result += +tmp
+        }
+        return result
+    },
+    fullPrice: 0,
+    servicePercentPrice: 0,
+    service1: '',
+    service2: '',
+    asking: () => {
+        let tmp
+        title = prompt('Как называется ваш проект?', ' КаЛьКулятор Верстки')
+        screens = prompt('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные')
+        do {
+            tmp = prompt('Сколько будет стоить данная работа?', '12000')
+            if (tmp === null) {
+                tmp = 0
+                break
+            }
+            tmp = tmp.trim()
+        } while (!isNumber(tmp))
+        screenPrice = +tmp
+        adaptive = confirm('Нужен ли адаптив на сайте?')
+    },
+
 }
 
-const asking = () => {
-    let tmp
-    title = prompt('Как называется ваш проект?', ' КаЛьКулятор Верстки')
-    screens = prompt('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные')
-    do {
-        tmp = prompt('Сколько будет стоить данная работа?', '12000')
-        if (tmp === null) {
-            tmp = 0
-            break
-        }
-        tmp = tmp.trim()
-    } while (!isNumber(tmp))
-    screenPrice = +tmp
-    adaptive = confirm('Нужен ли адаптив на сайте?')
+
+
+const isNumber = (num) => {
+    return !isNaN(parseFloat(num)) && isFinite(num)
 }
 
 const getAllServicePrices = () => {
