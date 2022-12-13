@@ -9,15 +9,14 @@ const appData = {
     allServicePrices: 0,
     fullPrice: 0,
     servicePercentPrice: 0,
-    service1: '',
-    service2: '',
+    services: {},
 
     asking: () => {
         let tmp
         appData.title = prompt('Как называется ваш проект?', ' КаЛьКулятор Верстки')
         appData.screens = prompt('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные')
         do {
-            tmp = prompt('Сколько будет стоить данная работа?', '12000')
+            tmp = prompt('Сколько будет стоить данная работа?', '20000')
             if (tmp === null) {
                 tmp = 0
                 break
@@ -26,19 +25,8 @@ const appData = {
         } while (!appData.isNumber(tmp))
         appData.screenPrice = +tmp
         appData.adaptive = confirm('Нужен ли адаптив на сайте?')
-    },
-
-    isNumber: (num) => {
-        return !isNaN(parseFloat(num)) && isFinite(num)
-    },
-
-    getAllServicePrices: () => {
-        let tmp
-        let result = 0
         for (let i = 0; i < 2; i++) {
-            i === 0
-                ? appData.service1 = prompt('Какой дополнительный тип услуги нужен?')
-                : appData.service2 = prompt('Какой дополнительный тип услуги нужен?')
+            let serviceName = prompt('Какой дополнительный тип услуги нужен?')
             do {
                 tmp = prompt('Сколько это будет стоить?', '1000')
                 if (tmp === null) {
@@ -47,21 +35,30 @@ const appData = {
                 }
                 tmp = tmp.trim()
             } while (!appData.isNumber(tmp))
-            result += +tmp
+            appData.services[`${serviceName}${i + 1}`] = +tmp
         }
-        return result
     },
 
-    getFullPrice: (screenPrice, allServicePrices) => {
-        return screenPrice + allServicePrices
+    isNumber: (num) => {
+        return !isNaN(parseFloat(num)) && isFinite(num)
     },
 
-    getTitle: (title) => {
-        return title.trim()[0].toUpperCase() + title.trim().slice(1).toLowerCase()
+    getAllServicePrices: () => {
+        for (const key in appData.services) {
+            appData.allServicePrices += appData.services[key]
+        }
     },
 
-    getServicePercentPrices: (fullPrice, rollback) => {
-        return Math.ceil(fullPrice - (fullPrice * (rollback / 100)))
+    getFullPrice: () => {
+        appData.fullPrice = appData.screenPrice + appData.allServicePrices
+    },
+
+    getTitle: () => {
+        appData.title = appData.title.trim()[0].toUpperCase() + appData.title.trim().slice(1).toLowerCase()
+    },
+
+    getServicePercentPrice: () => {
+        appData.servicePercentPrice = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)))
     },
 
     getRollbackMessage: (price) => {
@@ -78,10 +75,10 @@ const appData = {
 
     start: () => {
         appData.asking()
-        appData.allServicePrices = appData.getAllServicePrices()
-        appData.fullPrice = appData.getFullPrice(appData.screenPrice, appData.allServicePrices)
-        appData.servicePercentPrice = appData.getServicePercentPrices(appData.fullPrice, appData.rollback)
-        appData.title = appData.getTitle(appData.title)
+        appData.getAllServicePrices()
+        appData.getFullPrice()
+        appData.getServicePercentPrice()
+        appData.getTitle()
         appData.logger()
     },
 
@@ -89,6 +86,7 @@ const appData = {
         for (const key in appData) {
             console.log(`${key}: ${appData[key]}`)
         }
+        console.log(appData.services);
     },
 }
 
