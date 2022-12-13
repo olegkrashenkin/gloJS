@@ -2,7 +2,7 @@
 
 const appData = {
     title: '',
-    screens: '',
+    screens: [],
     screenPrice: 0,
     adaptive: true,
     rollback: 10,
@@ -13,20 +13,37 @@ const appData = {
 
     asking: () => {
         let tmp
-        appData.title = prompt('Как называется ваш проект?', ' КаЛьКулятор Верстки')
-        appData.screens = prompt('Какие типы экранов нужно разработать?', 'Простые, Сложные, Интерактивные')
         do {
-            tmp = prompt('Сколько будет стоить данная работа?', '20000')
-            if (tmp === null) {
-                tmp = 0
-                break
-            }
-            tmp = tmp.trim()
-        } while (!appData.isNumber(tmp))
-        appData.screenPrice = +tmp
-        appData.adaptive = confirm('Нужен ли адаптив на сайте?')
+            tmp = prompt('Как называется ваш проект?', ' КаЛьКулятор Верстки')
+        } while (appData.isNumber(tmp))
+        appData.title = tmp
         for (let i = 0; i < 2; i++) {
-            let serviceName = prompt('Какой дополнительный тип услуги нужен?')
+            let screenName
+            do {
+                screenName = prompt('Какие типы экранов нужно разработать?')
+            } while (appData.isNumber(screenName))
+            do {
+                tmp = prompt('Сколько будет стоить данная работа?')
+                if (tmp === null) {
+                    tmp = 0
+                    break
+                }
+                tmp = tmp.trim()
+            } while (!appData.isNumber(tmp))
+            appData.screens.push({ id: i, name: screenName, price: +tmp })
+        }
+
+        appData.screenPrice = appData.screens.reduce((sum, screen) => {
+            return sum + screen.price
+        }, 0)
+
+        appData.adaptive = confirm('Нужен ли адаптив на сайте?')
+
+        for (let i = 0; i < 2; i++) {
+            let serviceName
+            do {
+                serviceName = prompt('Какой дополнительный тип услуги нужен?')
+            } while (appData.isNumber(serviceName))
             do {
                 tmp = prompt('Сколько это будет стоить?', '1000')
                 if (tmp === null) {
@@ -35,7 +52,7 @@ const appData = {
                 }
                 tmp = tmp.trim()
             } while (!appData.isNumber(tmp))
-            appData.services[`${serviceName}${i + 1}`] = +tmp
+            appData.services[`${serviceName}(${i + 1})`] = +tmp
         }
     },
 
@@ -53,7 +70,7 @@ const appData = {
         appData.fullPrice = appData.screenPrice + appData.allServicePrices
     },
 
-    getTitle: () => {
+    getTitle: () => {//! - Починить трим!
         appData.title = appData.title.trim()[0].toUpperCase() + appData.title.trim().slice(1).toLowerCase()
     },
 
@@ -86,7 +103,8 @@ const appData = {
         for (const key in appData) {
             console.log(`${key}: ${appData[key]}`)
         }
-        console.log(appData.services);
+        console.log(appData.services)
+        console.log(appData.screens);
     },
 }
 
