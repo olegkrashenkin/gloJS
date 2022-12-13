@@ -70,7 +70,7 @@ const appData = {
         appData.fullPrice = appData.screenPrice + appData.allServicePrices
     },
 
-    getTitle: () => {//! - Починить трим!
+    getTitle: () => {
         appData.title = appData.title.trim()[0].toUpperCase() + appData.title.trim().slice(1).toLowerCase()
     },
 
