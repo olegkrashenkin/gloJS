@@ -1,4 +1,5 @@
 'use strict'
+
 const title = document.getElementsByTagName('h1')[0].textContent
 const handlerBtns = document.getElementsByClassName('handler_btn')
 const screenBtn = document.querySelector('.screen-btn')
@@ -7,7 +8,7 @@ const otherItemsNumber = document.querySelectorAll('.other-items.number')
 const inputType = document.querySelector('.rollback>*>input').getAttribute('type')
 const span = document.querySelector('.rollback>*>.range-value')
 let totalInputEls = []
-let screen = document.querySelectorAll('.screen')
+let screen = document.querySelectorAll('.screen') // Вот тут не совсем понял задание
 
 
 const appData = {
@@ -20,7 +21,7 @@ const appData = {
     fullPrice: 0,
     servicePercentPrice: 0,
     services: {},
-    //! ЗАПИШИ САВУ К ВРАЧУ ОРТОДОНТУ!!!!!
+
     asking: () => {
         let tmp
         do {
@@ -118,23 +119,11 @@ const appData = {
     },
 }
 
-// appData.start()
-
-
-
-
+appData.start()
 
 for (const iterator of document.getElementsByClassName('total-input')) {
     totalInputEls.push(iterator)
 }
-// console.dir(title);
-// console.log(handlerBtns);
-// console.log(screenBtn);
-// console.log(otherItemsPercent)
-// console.log(otherItemsNumber)
-// console.log(inputType)
-// console.log(span)
-console.log(screen)
 
 
 
