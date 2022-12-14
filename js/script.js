@@ -10,7 +10,7 @@ const appData = {
     fullPrice: 0,
     servicePercentPrice: 0,
     services: {},
-
+    //! ЗАПИШИ САВУ К ВРАЧУ ОРТОДОНТУ!!!!!
     asking: () => {
         let tmp
         do {
