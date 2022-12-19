@@ -55,11 +55,9 @@ const appData = {
             }
         })
     },
-
     addTitle: () => {
         document.title = title.textContent
     },
-
     addScreens: () => {
         screens = document.querySelectorAll('.screen')
         screens.forEach((item, idx) => {
@@ -67,55 +65,43 @@ const appData = {
             const input = item.querySelector('input')
             const name = select.options[select.selectedIndex].textContent
             const price = +select.value * +input.value
-
             appData.screens.push({ id: idx, name: name, price: price, count: +input.value })
         })
     },
-
     addScreenBlock: () => {
         screens = document.querySelectorAll('.screen')
         const cloneScreen = screens[0].cloneNode(true)
-
         cloneScreen.querySelector('input').value = ''
         screens[screens.length - 1].after(cloneScreen)
     },
-
     addPrices: () => {
         for (let screen of appData.screens) {
             appData.screenPrice += +screen.price
             appData.screensCount += screen.count
         }
-
         for (let key in appData.servicesNumber) {
             appData.servicePricesNumber += appData.servicesNumber[key]
         }
-
         for (let key in appData.servicesPercent) {
             appData.servicePricesPercent += appData.screenPrice * (appData.servicesPercent[key] / 100)
         }
-
         appData.fullPrice = +appData.screenPrice + appData.servicePricesPercent + appData.servicePricesNumber
         appData.servicePercentPrice = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)))
     },
-
     addServises: () => {
         otherItemsPercent.forEach((item) => {
             const check = item.querySelector('input[type=checkbox]')
             const label = item.querySelector('label')
             const input = item.querySelector('input[type=text]')
-
             if (check.checked) appData.servicesPercent[label.textContent] = +input.value
         })
-
         otherItemsNumber.forEach((item) => {
             const check = item.querySelector('input[type=checkbox]')
             const label = item.querySelector('label')
             const input = item.querySelector('input[type=text]')
-
             if (check.checked) appData.servicesNumber[label.textContent] = +input.value
         })
     },
-
     showResult: () => {
         screenPrice.value = appData.screenPrice
         screenCount.value = appData.screensCount
@@ -123,21 +109,6 @@ const appData = {
         fullPrice.value = appData.fullPrice
         totalPrice.value = appData.servicePercentPrice
     },
-
-    clearVars: () => {
-        appData.title = '',
-            appData.screens = [],
-            appData.screenPrice = 0,
-            appData.adaptive = true,
-            appData.rollback = 0,
-            appData.servicePricesPercent = 0,
-            appData.servicePricesNumber = 0,
-            appData.fullPrice = 0,
-            appData.servicePercentPrice = 0,
-            appData.servicesPercent = {},
-            appData.servicesNumber = {}
-    },
-
     start: () => {
         appData.addScreens()
         appData.addServises()
