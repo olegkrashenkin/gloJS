@@ -1,9 +1,9 @@
 'use strict'
 
-const title = document.getElementsByTagName('h1')[0].textContent
+const title = document.getElementsByTagName('h1')[0]
 const startBtn = document.getElementsByClassName('handler_btn')[0]
 const resetBtn = document.getElementsByClassName('handler_btn')[1]
-const screenBtn = document.querySelector('.screen-btn')
+const addBtn = document.querySelector('.screen-btn')
 const otherItemsPercent = document.querySelectorAll('.other-items.percent')
 const otherItemsNumber = document.querySelectorAll('.other-items.number')
 const inputType = document.querySelector('.rollback>*>input').getAttribute('type')
@@ -13,7 +13,7 @@ const screenCount = document.getElementsByClassName('total-input')[1]
 const servicePrices = document.getElementsByClassName('total-input')[2]
 const fullPrice = document.getElementsByClassName('total-input')[3]
 const totalPrice = document.getElementsByClassName('total-input')[4]
-let screen = document.querySelectorAll('.screen')
+let screens = document.querySelectorAll('.screen')
 
 const appData = {
     title: '',
@@ -25,6 +25,31 @@ const appData = {
     fullPrice: 0,
     servicePercentPrice: 0,
     services: {},
+
+    init: () => {
+        appData.addTitle()
+        startBtn.addEventListener('click', appData.start)
+        addBtn.addEventListener('click', appData.addScreenBlock)
+    },
+
+    addTitle: () => {
+        document.title = title.textContent
+    },
+
+    addScreens: () => {
+        screens.forEach((item, idx) => {
+            const select = item.querySelector('select')
+            const input = item.querySelector('input')
+            const name = select.options[select.selectedIndex].textContent
+            appData.screens.push({ id: idx, name: name, price: +select.value * +input.value })
+        })
+    },
+
+    addScreenBlock: () => {
+        screens = document.querySelectorAll('.screen')
+        const cloneScreen = screens[0].cloneNode(true)
+        screens[screens.length - 1].after(cloneScreen)
+    },
 
     asking: () => {
         let tmp
@@ -71,10 +96,6 @@ const appData = {
         }
     },
 
-    isNumber: (num) => {
-        return !isNaN(parseFloat(num)) && isFinite(num)
-    },
-
     getAllServicePrices: () => {
         for (const key in appData.services) {
             appData.allServicePrices += appData.services[key]
@@ -85,42 +106,18 @@ const appData = {
         appData.fullPrice = appData.screenPrice + appData.allServicePrices
     },
 
-    getTitle: () => {
-        appData.title = appData.title.trim()[0].toUpperCase() + appData.title.trim().slice(1).toLowerCase()
-    },
 
     getServicePercentPrice: () => {
         appData.servicePercentPrice = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)))
     },
 
-    getRollbackMessage: (price) => {
-        if (price <= 0) {
-            return 'Что то пошло не так'
-        } else if (price <= 15000) {
-            return 'Скидка не предусмотрена'
-        } else if (price <= 30000) {
-            return 'Даем скидку в 5%'
-        } else {
-            return 'Даем скидку в 10%'
-        }
-    },
-
     start: () => {
-        appData.asking()
-        appData.getAllServicePrices()
-        appData.getFullPrice()
-        appData.getServicePercentPrice()
-        appData.getTitle()
-        appData.logger()
-    },
-
-    logger: () => {
-        for (const key in appData) {
-            console.log(`${key}: ${appData[key]}`)
-        }
-        console.log(appData.services)
-        console.log(appData.screens);
+        appData.addScreens()
+        // appData.asking()
+        // appData.getAllServicePrices()
+        // appData.getFullPrice()
+        // appData.getServicePercentPrice()
     },
 }
 
-appData.start()
+appData.init()
