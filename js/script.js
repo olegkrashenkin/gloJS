@@ -43,18 +43,17 @@ const appData = {
                 const select = item.querySelector('select')
                 const name = select.options[select.selectedIndex].textContent
                 const price = +item.querySelector('input').value
-                console.log(name, price);
-                if (name === 'Тип экранов' || price == 0) {
-                    isFull.push(1)
-                } else {
-                    isFull.push(0)
-                }
+                name === 'Тип экранов' || price == 0 ? isFull.push(false) : isFull.push(true)
             })
-            if (!isFull.includes(1)) {
-                startBtn.addEventListener('mouseup', appData.start)
+            if (!isFull.includes(false)) {
+                startBtn.addEventListener('mouseup', () => {
+                    inputType.addEventListener('input', () => {
+                        totalPrice.value = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)))
+                    })
+                    appData.start()
+                })
             }
         })
-
     },
 
     addTitle: () => {
@@ -68,8 +67,6 @@ const appData = {
             const input = item.querySelector('input')
             const name = select.options[select.selectedIndex].textContent
             const price = +select.value * +input.value
-
-
 
             appData.screens.push({ id: idx, name: name, price: price, count: +input.value })
         })
@@ -146,7 +143,7 @@ const appData = {
         appData.addServises()
         appData.addPrices()
         appData.showResult()
-        console.log(appData)
+        // console.log(appData)
         startBtn.removeEventListener('mouseup', appData.start)
     },
 }
