@@ -102,7 +102,6 @@ const appData = {
         startBtn.removeEventListener('mouseup', appData.mouseUp)
     },
     mouseDown: () => {
-        console.log('jk');
         screens = document.querySelectorAll('.screen')
         let isFull = []
         screens.forEach((item) => {
