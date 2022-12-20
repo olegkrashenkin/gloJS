@@ -36,24 +36,7 @@ const appData = {
             appData.rollback = +event.target.value
             span.textContent = `${event.target.value} %`
         })
-        startBtn.addEventListener('mousedown', () => {
-            screens = document.querySelectorAll('.screen')
-            let isFull = []
-            screens.forEach((item) => {
-                const select = item.querySelector('select')
-                const name = select.options[select.selectedIndex].textContent
-                const price = +item.querySelector('input').value
-                name === 'Тип экранов' || price == 0 ? isFull.push(false) : isFull.push(true)
-            })
-            if (!isFull.includes(false)) {
-                startBtn.addEventListener('mouseup', () => {
-                    inputType.addEventListener('input', () => {
-                        totalPrice.value = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)))
-                    })
-                    appData.start()
-                })
-            }
-        })
+        startBtn.addEventListener('mousedown', appData.mouseDown)
     },
     addTitle: () => {
         document.title = title.textContent
@@ -115,8 +98,29 @@ const appData = {
         appData.addPrices()
         appData.showResult()
         // console.log(appData)
-        startBtn.removeEventListener('mouseup', appData.start)
+        startBtn.removeEventListener('mousedown', appData.mouseDown)
+        startBtn.removeEventListener('mouseup', appData.mouseUp)
     },
+    mouseDown: () => {
+        console.log('jk');
+        screens = document.querySelectorAll('.screen')
+        let isFull = []
+        screens.forEach((item) => {
+            const select = item.querySelector('select')
+            const name = select.options[select.selectedIndex].textContent
+            const price = +item.querySelector('input').value
+            name === 'Тип экранов' || price == 0 ? isFull.push(false) : isFull.push(true)
+        })
+        if (!isFull.includes(false)) {
+            startBtn.addEventListener('mouseup', appData.mouseUp)
+        }
+    },
+    mouseUp: () => {
+        inputType.addEventListener('input', () => {
+            totalPrice.value = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)))
+        })
+        appData.start()
+    }
 }
 
 appData.init()
