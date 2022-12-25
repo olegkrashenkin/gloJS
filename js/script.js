@@ -165,6 +165,7 @@ const appData = {
         inputType.addEventListener('input', () => {
             totalPrice.value = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)))
         })
+
         appData.start()
     },
 
@@ -243,6 +244,7 @@ const appData = {
         cloneScreen.querySelector('input').value = ''
 
         screens.forEach((item) => item.remove())
+
         addBtn.before(cloneScreen)
 
         otherItemsPercent.forEach((item) => item.querySelector('input[type=checkbox]').checked = false)
