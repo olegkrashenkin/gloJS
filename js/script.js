@@ -38,35 +38,36 @@ const appData = {
     servicesPercent: {},
     servicesNumber: {},
     screensCount: 0,
+    cmsPercent: 0,
 
-    init: () => {
-        appData.addTitle()
-        addBtn.addEventListener('click', appData.addScreenBlock)
+    init: function () {
+        this.addTitle()
+
+        addBtn.addEventListener('click', this.addScreenBlock)
 
         inputType.addEventListener('input', (event) => {
-            appData.rollback = +event.target.value
+            this.rollback = +event.target.value
             span.textContent = `${event.target.value} %`
         })
 
-        startBtn.addEventListener('mousedown', appData.mouseDown)
+        startBtn.addEventListener('mousedown', this.mouseDown)
 
         resetBtn.addEventListener('click', () => {
-            appData.reset()
-            appData.showResult()
-            appData.screenEnabled()
+            this.reset()
+            this.showResult()
+            this.screenEnabled()
         })
 
         cms.addEventListener('change', () => {
-            appData.addCms(cms.checked)
+            this.addCms(cms.checked)
         })
-        // console.log(this);
     },
 
-    addTitle: () => {
+    addTitle: function () {
         document.title = title.textContent
     },
 
-    addScreens: () => {
+    addScreens: function () {
         screens = document.querySelectorAll('.screen')
 
         screens.forEach((item, idx) => {
@@ -75,11 +76,11 @@ const appData = {
             const name = select.options[select.selectedIndex].textContent
             const price = +select.value * +input.value
 
-            appData.screens.push({ id: idx, name: name, price: price, count: +input.value })
+            this.screens.push({ id: idx, name: name, price: price, count: +input.value })
         })
     },
 
-    addScreenBlock: () => {
+    addScreenBlock: function () {
         screens = document.querySelectorAll('.screen')
         const cloneScreen = screens[0].cloneNode(true)
 
@@ -87,31 +88,33 @@ const appData = {
         screens[screens.length - 1].after(cloneScreen)
     },
 
-    addPrices: () => {
-        for (let screen of appData.screens) {
-            appData.screenPrice += +screen.price
-            appData.screensCount += screen.count
+    addPrices: function () {
+        for (let screen of this.screens) {
+            this.screenPrice += +screen.price
+            this.screensCount += screen.count
         }
 
-        for (let key in appData.servicesNumber) {
-            appData.servicePricesNumber += appData.servicesNumber[key]
+        for (let key in this.servicesNumber) {
+            this.servicePricesNumber += this.servicesNumber[key]
         }
 
-        for (let key in appData.servicesPercent) {
-            appData.servicePricesPercent += appData.screenPrice * (appData.servicesPercent[key] / 100)
+        for (let key in this.servicesPercent) {
+            this.servicePricesPercent += this.screenPrice * (this.servicesPercent[key] / 100)
         }
 
-        appData.fullPrice = +appData.screenPrice + appData.servicePricesPercent + appData.servicePricesNumber
-        appData.servicePercentPrice = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)))
+        this.fullPrice = +this.screenPrice + this.servicePricesPercent + this.servicePricesNumber
+        this.fullPrice = this.fullPrice + (this.fullPrice / 100 * this.cmsPercent)
+
+        this.servicePercentPrice = Math.ceil(this.fullPrice - (this.fullPrice * (this.rollback / 100)))
     },
 
-    addServises: () => {
+    addServises: function () {
         otherItemsPercent.forEach((item) => {
             const check = item.querySelector('input[type=checkbox]')
             const label = item.querySelector('label')
             const input = item.querySelector('input[type=text]')
 
-            if (check.checked) appData.servicesPercent[label.textContent] = +input.value
+            if (check.checked) this.servicesPercent[label.textContent] = +input.value
         })
 
         otherItemsNumber.forEach((item) => {
@@ -119,30 +122,29 @@ const appData = {
             const label = item.querySelector('label')
             const input = item.querySelector('input[type=text]')
 
-            if (check.checked) appData.servicesNumber[label.textContent] = +input.value
+            if (check.checked) this.servicesNumber[label.textContent] = +input.value
         })
     },
 
-    showResult: () => {
-        screenPrice.value = appData.screenPrice
-        screenCount.value = appData.screensCount
-        servicePrices.value = appData.servicePricesPercent + appData.servicePricesNumber
-        fullPrice.value = appData.fullPrice
-        totalPrice.value = appData.servicePercentPrice
+    showResult: function () {
+        screenPrice.value = this.screenPrice
+        screenCount.value = this.screensCount
+        servicePrices.value = this.servicePricesPercent + this.servicePricesNumber
+        fullPrice.value = this.fullPrice
+        totalPrice.value = this.servicePercentPrice
     },
 
-    start: () => {
-        appData.addScreens()
-        appData.addServises()
-        appData.addPrices()
-        appData.showResult()
-        // console.log(appData)
-        appData.screenDisabled()
+    start: function () {
+        this.addScreens()
+        this.addServises()
+        this.addPrices()
+        this.showResult()
+        this.screenDisabled()
 
-        startBtn.removeEventListener('mouseup', appData.mouseUp)
+        startBtn.removeEventListener('mouseup', this.mouseUp)
     },
 
-    mouseDown: () => {
+    mouseDown: function () {
         screens = document.querySelectorAll('.screen')
         let isFull = []
 
@@ -159,14 +161,14 @@ const appData = {
         }
     },
 
-    mouseUp: () => {
+    mouseUp: function () {
         inputType.addEventListener('input', () => {
             totalPrice.value = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)))
         })
         appData.start()
     },
 
-    screenDisabled: () => {
+    screenDisabled: function () {
         addBtn.disabled = true
 
         screens.forEach((item) => {
@@ -192,11 +194,12 @@ const appData = {
         resetBtn.style.display = 'block'
     },
 
-    screenEnabled: () => {
+    screenEnabled: function () {
+        screens = document.querySelectorAll('.screen')
+
         addBtn.disabled = false
 
         screens.forEach((item) => {
-            console.log('hello');
             item.querySelector('select').disabled = false
             item.querySelector('input').disabled = false
         })
@@ -219,19 +222,21 @@ const appData = {
         resetBtn.style.display = 'none'
     },
 
-    reset: () => {
-        appData.title = ''
-        appData.screens = []
-        appData.screenPrice = 0
-        appData.adaptive = true
-        appData.rollback = 0
-        appData.servicePricesPercent = 0
-        appData.servicePricesNumber = 0
-        appData.fullPrice = 0
-        appData.servicePercentPrice = 0
-        appData.servicesPercent = {}
-        appData.servicesNumber = {}
-        appData.screensCount = 0
+    reset: function () {
+        console.log(this);
+        this.title = ''
+        this.screens = []
+        this.screenPrice = 0
+        this.adaptive = true
+        this.rollback = 0
+        this.servicePricesPercent = 0
+        this.servicePricesNumber = 0
+        this.fullPrice = 0
+        this.servicePercentPrice = 0
+        this.servicesPercent = {}
+        this.servicesNumber = {}
+        this.screensCount = 0
+        this.cms = 0
 
         const cloneScreen = screens[0].cloneNode(true)
 
@@ -248,10 +253,10 @@ const appData = {
         inputType.value = '0'
         span.textContent = '0 %'
 
-        appData.addCms(false)
+        this.addCms(false)
     },
 
-    addCms: (isChecked) => {
+    addCms: function (isChecked) {
         if (isChecked) {
             hiddenCmsVariants.style.display = 'flex'
 
@@ -259,7 +264,7 @@ const appData = {
                 switch (event.target.value) {
                     case '50':
                         hiddenInput.style.display = 'none'
-                        //! Расчет общей стоимости работ
+                        this.cmsPercent = 50
                         break;
 
                     case 'other':
