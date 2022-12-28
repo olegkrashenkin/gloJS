@@ -50,7 +50,7 @@ const appData = {
             span.textContent = `${event.target.value} %`
         })
 
-        startBtn.addEventListener('mousedown', this.mouseDown)
+        startBtn.addEventListener('mousedown', this.mouseDown.bind(this))
 
         resetBtn.addEventListener('click', () => {
             this.reset()
@@ -157,16 +157,16 @@ const appData = {
         })
 
         if (!isFull.includes(false)) {
-            startBtn.addEventListener('mouseup', appData.mouseUp)
+            startBtn.addEventListener('mouseup', this.mouseUp.bind(this))
         }
     },
 
     mouseUp: function () {
         inputType.addEventListener('input', () => {
-            totalPrice.value = Math.ceil(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)))
+            totalPrice.value = Math.ceil(this.fullPrice - (this.fullPrice * (this.rollback / 100)))
         })
 
-        appData.start()
+        this.start()
     },
 
     screenDisabled: function () {
@@ -224,7 +224,6 @@ const appData = {
     },
 
     reset: function () {
-        console.log(this);
         this.title = ''
         this.screens = []
         this.screenPrice = 0
